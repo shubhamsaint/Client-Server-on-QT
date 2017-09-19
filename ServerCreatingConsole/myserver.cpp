@@ -28,6 +28,15 @@ void MyServer::incomingConnection(qintptr socketDescriptor)
 
     sockets.insert(socket);
 
+    QString msg = "Client Connected:";
+    msg.append(socket->peerAddress().toString());
+
+    foreach(QTcpSocket *otherSocket, sockets)
+    {
+     otherSocket->write(msg.toUtf8());
+     otherSocket->write("\n\r");
+    }
+
     connect(socket, SIGNAL(readyRead()), this, SLOT(readClient()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 }
@@ -49,7 +58,14 @@ void MyServer::readClient()
 void MyServer::disconnected()
 {
     QTcpSocket *socket = (QTcpSocket*)sender();
-    qDebug() << "Client disconnected:" << socket->peerAddress().toString();
+    sockets.remove(socket);
+    QString msg = "Client disconnected:" ;
+    msg.append(socket->peerAddress().toString());
+    foreach(QTcpSocket *otherSocket, sockets)
+    {
+     otherSocket->write(msg.toUtf8());
+     otherSocket->write("\n\r");
+     }
 
     //sockets.remove(socket);   `
 

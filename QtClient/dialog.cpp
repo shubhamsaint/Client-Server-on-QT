@@ -10,6 +10,7 @@ Dialog::Dialog(QWidget *parent) :
     socket = new QTcpSocket(this);
      connect(socket, SIGNAL(readyRead()), this, SLOT(readServer()));
     ui->setupUi(this);
+    ui->pushButtonSend->setEnabled(false);
 }
 
 Dialog::~Dialog()
@@ -20,6 +21,9 @@ Dialog::~Dialog()
 void Dialog::on_pushButtonConnect_clicked()
 {
     socket->connectToHost(ui->textEditIP->toPlainText(),ui->textEditPort->toPlainText().toInt());
+
+        ui->pushButtonSend->setEnabled(true);
+
 }
 
 void Dialog::on_pushButtonSend_clicked()
