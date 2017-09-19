@@ -21,8 +21,8 @@ Dialog::~Dialog()
 void Dialog::on_pushButtonConnect_clicked()
 {
     socket->connectToHost(ui->textEditIP->toPlainText(),ui->textEditPort->toPlainText().toInt());
-
-        ui->pushButtonSend->setEnabled(true);
+    //enable the button when connect button is clicked
+    ui->pushButtonSend->setEnabled(true);
 
 }
 
