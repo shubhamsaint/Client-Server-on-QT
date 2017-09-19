@@ -35,8 +35,8 @@ void Dialog::on_pushButtonSend_clicked()
        {
            socket->write(QString(message + " ").toUtf8());
        }
-
-        ui->textEditMessage->clear();
+        //clear the msg on pressing send button
+       ui->textEditMessage->clear();
 }
 
 void Dialog::readServer()
