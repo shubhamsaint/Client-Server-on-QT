@@ -2,6 +2,7 @@
 #include "ui_dialog.h"
 
 #include <QMessageBox>
+#include <QFile>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -29,14 +30,21 @@ void Dialog::on_pushButtonConnect_clicked()
 void Dialog::on_pushButtonSend_clicked()
 {
 
-
        QString message = ui->textEditMessage->toPlainText().trimmed();
-       if(!message.isEmpty())
-       {
-           socket->write(QString(message + " ").toUtf8());
+       QFile file("D:/networkdevice20_12_18_00_370PM.avi");
+       if(file.open(QIODevice::ReadOnly))
+        {
+           QByteArray mydata=file.readAll();
+           ui->textEditMessage->setText(QString::number(mydata.size()));
+            socket->write(mydata);
        }
+      else{ ui->textEditMessage->setText("noo");}
+//       if(!message.isEmpty())
+//       {
+//           socket->write(QString(message + " ").toUtf8());
+//       }
 
-       ui->textEditMessage->clear();
+       //ui->textEditMessage->clear();
 }
 
 void Dialog::readServer()
@@ -45,10 +53,26 @@ void Dialog::readServer()
 
    // msg.append(ui->textEdit_chat->toPlainText());
 
-    while(socket->canReadLine())
+    QByteArray data;
+    ui->textEdit_chat->setText("writinh");
+    data = socket->readAll();
+    if(data.size()!=0)
     {
-         msg.append(socket->readLine());
+       ui->textEditMessage->setText(QString::number(data.size()));
+    QFile file("D:/Helloo.avi");
+    file.open(QIODevice::WriteOnly);
+    file.write(data);
+    file.close();
+    }
+    else
+    {
+        ui->textEditMessage->setText("yoyo");
     }
 
-    ui->textEdit_chat->setText(msg);
+//    while(socket->canReadLine())
+//    {
+//         msg.append(socket->readLine());
+//    }
+
+    //ui->textEdit_chat->setText(msg);
 }

@@ -45,14 +45,17 @@ void MyServer::readClient()
 {
      QTcpSocket *socket = (QTcpSocket*)sender();
      //qDebug()<<socket->socketDescriptor()<<" :"<<socket->readAll();
-     QString msg = socket->peerAddress().toString();
-     msg.append(" : ");
-     msg.append(socket->readAll());
+    // QString msg = socket->peerAddress().toString();
+    // msg.append(" : ");
+     //msg.append(socket->readAll());
+     QByteArray data;
+
+     data = socket->readAll();
      foreach(QTcpSocket *otherSocket, sockets)
      {
-      otherSocket->write(msg.toUtf8());
-      otherSocket->write("\n\r");
-      }
+      otherSocket->write(data);
+      //otherSocket->write("\n\r");
+  }
 }
 
 void MyServer::disconnected()
@@ -65,8 +68,7 @@ void MyServer::disconnected()
     {
      otherSocket->write(msg.toUtf8());
      otherSocket->write("\n\r");
-     }
-
+    }
     //sockets.remove(socket);   `
 
 }
